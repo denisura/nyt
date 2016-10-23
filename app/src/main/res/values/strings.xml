@@ -1,5 +1,7 @@
 <resources>
-    <string name="app_name">New York Times Article Seacher</string>
+    <string name="app_name">Big Times</string>
     <string name="search_hint">Search article by keywords.</string>
+    <string name="menu_search">Search</string>
+    <string name="article_thumbnail">Article thumbnail</string>
 
 </resources>

@@ -10,24 +10,24 @@ public class Response {
 
     @SerializedName("docs")
     @Expose
-    private List<Doc> docs = new ArrayList<>();
+    private List<Article> articles = new ArrayList<>();
 
     /**
      *
      * @return
-     * The docs
+     * The articles
      */
-    public List<Doc> getDocs() {
-        return docs;
+    public List<Article> getArticles() {
+        return articles;
     }
 
     /**
      *
-     * @param docs
-     * The docs
+     * @param articles
+     * The articles
      */
-    public void setDocs(List<Doc> docs) {
-        this.docs = docs;
+    public void setArticles(List<Article> articles) {
+        this.articles = articles;
     }
 
 }

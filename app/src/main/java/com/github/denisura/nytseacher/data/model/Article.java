@@ -6,14 +6,14 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Doc {
+public class Article {
 
     @SerializedName("headline")
     @Expose
     private Headline headline;
     @SerializedName("multimedia")
     @Expose
-    private List<Multimedium> multimedia = new ArrayList<Multimedium>();
+    private List<Multimedium> multimedia = new ArrayList<>();
     @SerializedName("web_url")
     @Expose
     private String webUrl;
@@ -23,8 +23,8 @@ public class Doc {
      * @return
      * The headline
      */
-    public Headline getHeadline() {
-        return headline;
+    public String getHeadline() {
+        return headline.getMain();
     }
 
     /**
@@ -36,6 +36,13 @@ public class Doc {
         this.headline = headline;
     }
 
+    public String getThumbnail() {
+        if (multimedia.isEmpty()){
+            return "";
+        }
+       return  multimedia.get(0).getUrl();
+    }
+
     /**
      *
      * @return
@@ -43,6 +50,10 @@ public class Doc {
      */
     public List<Multimedium> getMultimedia() {
         return multimedia;
+    }
+
+    public boolean hasMultimedia() {
+        return (!multimedia.isEmpty());
     }
 
     /**

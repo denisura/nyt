@@ -3,7 +3,7 @@ package com.github.denisura.nytseacher.data.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Multimedium {
+class Multimedium {
 
     @SerializedName("width")
     @Expose
@@ -38,8 +38,8 @@ public class Multimedium {
     /**
      * @return The url
      */
-    public String getUrl() {
-        return url;
+    String getUrl() {
+        return "https://static01.nyt.com/" + url;
     }
 
     /**

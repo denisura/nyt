@@ -8,7 +8,7 @@ public class ArticleSearchResponse {
 
     @SerializedName("response")
     @Expose
-    private ArticleSearchResponse response;
+    private Response response;
     @SerializedName("status")
     @Expose
     private String status;
@@ -21,7 +21,7 @@ public class ArticleSearchResponse {
      * @return
      * The response
      */
-    public ArticleSearchResponse getResponse() {
+    public Response getResponse() {
         return response;
     }
 
@@ -30,7 +30,7 @@ public class ArticleSearchResponse {
      * @param response
      * The response
      */
-    public void setResponse(ArticleSearchResponse response) {
+    public void setResponse(Response response) {
         this.response = response;
     }
 
