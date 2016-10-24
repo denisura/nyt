@@ -6,4 +6,11 @@
         android:title="@string/menu_search"
         appcompat:actionViewClass="android.support.v7.widget.SearchView"
         appcompat:showAsAction="always"/>
+
+    <item
+        android:id="@+id/menu_filter"
+        android:icon="@drawable/ic_filter_list"
+        appcompat:showAsAction="always"
+        android:title="@string/menu_filter">
+    </item>
 </menu>

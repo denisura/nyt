@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/edit_name"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:columnCount="2"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:rowCount="3">
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/beginDateLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/beginDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:drawableRight="@drawable/ic_date_picker"
+            android:drawableEnd="@drawable/ic_date_picker"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:hint="@string/label_begin_date"
+            android:maxLength="50"
+            android:maxLines="1"
+            android:nextFocusLeft="@id/beginDate"
+            android:nextFocusUp="@id/beginDate" />
+    </android.support.design.widget.TextInputLayout>
+
+    <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
+        android:id="@+id/sortspinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="11dp"
+        android:layout_marginRight="11dp"
+        android:layout_marginTop="62dp"
+        android:hint="@string/label_sort_order"
+        android:textColorHint="#05ab9a"
+        app:met_floatingLabel="normal" />
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/news_desk_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/sortspinner">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/news_desk"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:drawableRight="@drawable/ic_more"
+            android:drawableEnd="@drawable/ic_more"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:hint="@string/label_news_desks"
+            android:maxLength="50"
+            android:maxLines="1" />
+    </android.support.design.widget.TextInputLayout>
+
+</RelativeLayout>

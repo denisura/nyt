@@ -12,6 +12,7 @@ import com.github.denisura.nytseacher.R;
 import com.github.denisura.nytseacher.data.model.Article;
 import com.github.denisura.nytseacher.data.model.ArticleSearchResponse;
 import com.github.denisura.nytseacher.data.model.Item;
+import com.github.denisura.nytseacher.data.model.SearchFilter;
 import com.github.denisura.nytseacher.data.network.ArticleSearchOptions;
 import com.github.denisura.nytseacher.data.network.NewYorkTimesApi;
 import com.github.denisura.nytseacher.data.network.NewYorkTimesService;
@@ -29,26 +30,22 @@ public class SearchResultsFragment extends Fragment {
 
     // the fragment initialization parameters
     private static final String ARG_QUERY = "query";
+    private static final String ARG_FILTER = "filter";
     public RecyclerView mRecyclerView;
     private SearchResultsAdapter recyclerViewAdapter;
     private Subscription pagingSubscription;
     private NewYorkTimesApi _apiService;
     private String mQuery = "";
+    private SearchFilter mFilter = new SearchFilter();
 
     public SearchResultsFragment() {
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param query Parameter 1.
-     * @return A new instance of fragment SearchResultsFragment.
-     */
-    public static SearchResultsFragment newInstance(String query) {
+    public static SearchResultsFragment newInstance(String query, SearchFilter filter) {
         SearchResultsFragment fragment = new SearchResultsFragment();
         Bundle args = new Bundle();
         args.putString(ARG_QUERY, query);
+        args.putSerializable(ARG_FILTER, filter);
         fragment.setArguments(args);
         return fragment;
     }
@@ -56,8 +53,11 @@ public class SearchResultsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
+        if (getArguments().containsKey(ARG_QUERY)) {
             mQuery = getArguments().getString(ARG_QUERY);
+        }
+        if (getArguments().containsKey(ARG_FILTER)) {
+            mFilter = (SearchFilter) getArguments().getSerializable(ARG_FILTER);
         }
     }
 
@@ -97,8 +97,7 @@ public class SearchResultsFragment extends Fragment {
         _apiService = NewYorkTimesService.newService();
 
         ArticleSearchOptions.Builder builder = new ArticleSearchOptions.Builder(mQuery);
-        builder.page(1);
-        builder.sort("newest");
+        builder.filter(mFilter);
         ArticleSearchOptions options = builder.build();
         Timber.d(options.toString());
 

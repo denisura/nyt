@@ -5,22 +5,29 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import com.github.denisura.nytseacher.R;
+import com.github.denisura.nytseacher.data.model.SearchFilter;
 import com.github.denisura.nytseacher.ui.SingleFragmentActivity;
+import com.github.denisura.nytseacher.ui.filter.FilterFragment;
+import com.github.denisura.nytseacher.ui.filter.FilterListener;
 import com.github.denisura.nytseacher.ui.search.results.SearchResultsFragment;
 
 import timber.log.Timber;
 
 
-public class SearchActivity extends SingleFragmentActivity {
+public class SearchActivity extends SingleFragmentActivity implements FilterListener {
 
     static final String STATE_QUERY = "query";
+    static final String STATE_FILTER = "filter";
 
     String mQuery = "";
+    SearchFilter mSearchFilter;
 
     @Override
     protected Fragment createFragment() {
@@ -28,7 +35,7 @@ public class SearchActivity extends SingleFragmentActivity {
             mQuery = getIntent().getStringExtra(SearchManager.QUERY);
             Timber.d("Query %s", mQuery);
         }
-        return SearchResultsFragment.newInstance(mQuery);
+        return SearchResultsFragment.newInstance(mQuery, mSearchFilter);
     }
 
     @Override
@@ -37,6 +44,10 @@ public class SearchActivity extends SingleFragmentActivity {
         if (savedInstanceState != null) {
             // Restore value of members from saved state
             mQuery = savedInstanceState.getString(STATE_QUERY);
+            mSearchFilter = (SearchFilter) savedInstanceState.getSerializable(STATE_FILTER);
+        } else {
+            //TODO pull search filter form Shared preferences
+            mSearchFilter = new SearchFilter();
         }
         super.onCreate(savedInstanceState);
         if (!mQuery.equals("")) {
@@ -56,13 +67,42 @@ public class SearchActivity extends SingleFragmentActivity {
                 (SearchView) menu.findItem(R.id.menu_search).getActionView();
         searchView.setSearchableInfo(
                 searchManager.getSearchableInfo(getComponentName()));
-
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.menu_filter:
+                FragmentManager fm = getSupportFragmentManager();
+                FilterFragment filterFragment = FilterFragment.newInstance(
+                        getResources().getString(R.string.dialog_title_advance_search),
+                        mSearchFilter);
+                filterFragment.show(fm, "dialog_filter");
+                filterFragment.setListener(this);
+                break;
+            default:
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         savedInstanceState.putString(STATE_QUERY, mQuery);
+        savedInstanceState.putSerializable(STATE_FILTER, mSearchFilter);
         super.onSaveInstanceState(savedInstanceState);
+    }
+
+    @Override
+    public void onFilterAction(SearchFilter filter) {
+        mSearchFilter = filter;
+
+        FragmentManager fm = getSupportFragmentManager();
+        mActivityFragment = createFragment();
+        fm.beginTransaction()
+                .replace(R.id.fragment_container, mActivityFragment)
+                .commit();
     }
 }

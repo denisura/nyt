@@ -1,7 +1,31 @@
 <resources>
     <string name="app_name">Big Times</string>
     <string name="search_hint">Search article by keywords.</string>
-    <string name="menu_search">Search</string>
     <string name="article_thumbnail">Article thumbnail</string>
+
+    <string name="menu_search">Search</string>
+    <string name="menu_filter">Filter</string>
+
+    <string name="dialog_action_back">Back</string>
+    <string name="dialog_action_save">Save</string>
+    <string name="dialog_action_filter">Filter</string>
+
+    <string name="dialog_title_news_desk">Select News Desk</string>
+    <string name="dialog_title_begin_date">Pick Begin Date</string>
+    <string name="dialog_title_advance_search">Advance Search Options</string>
+
+    <string name="sort_option_oldest">Oldest</string>
+    <string name="sort_option_newest">Newest</string>
+    <string name="sort_option_relevancy">Relevancy (default)</string>
+
+    <string name="label_begin_date">Begin Date</string>
+    <string name="label_sort_order">Sort Order</string>
+    <string name="label_news_desks">News Desks</string>
+
+    <string-array name="string_array_news_deck">
+        <item translatable="false">Arts</item>
+        <item translatable="false">Fashion &amp; Style</item>
+        <item translatable="false">Sports</item>
+    </string-array>
 
 </resources>
