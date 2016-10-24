@@ -51,7 +51,6 @@ public class FilterFragment extends DialogFragment {
     public static FilterFragment newInstance(String title, SearchFilter filter) {
         FilterFragment frag = new FilterFragment();
         Bundle args = new Bundle();
-        //TODO replace putParceble
         args.putParcelable(ARG_FILTER, Parcels.wrap(filter));
         args.putString(ARG_TITLE, title);
         frag.setArguments(args);

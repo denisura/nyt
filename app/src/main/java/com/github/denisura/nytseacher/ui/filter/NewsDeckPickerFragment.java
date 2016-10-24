@@ -15,7 +15,6 @@ import java.util.ArrayList;
 
 import timber.log.Timber;
 
-
 public class NewsDeckPickerFragment extends DialogFragment {
 
     public static final String EXTRA_SELECTED = "SELECTED";

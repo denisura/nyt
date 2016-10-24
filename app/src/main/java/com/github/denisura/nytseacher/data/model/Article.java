@@ -10,13 +10,13 @@ public class Article {
 
     @SerializedName("headline")
     @Expose
-    private Headline headline;
+    public Headline headline;
     @SerializedName("multimedia")
     @Expose
-    private List<Multimedium> multimedia = new ArrayList<>();
+    public List<Multimedium> multimedia = new ArrayList<>();
     @SerializedName("web_url")
     @Expose
-    private String webUrl;
+    public String webUrl;
 
     /**
      *

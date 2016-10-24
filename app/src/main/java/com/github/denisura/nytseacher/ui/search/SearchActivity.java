@@ -17,6 +17,7 @@ import com.github.denisura.nytseacher.ui.SingleFragmentActivity;
 import com.github.denisura.nytseacher.ui.filter.FilterFragment;
 import com.github.denisura.nytseacher.ui.filter.FilterListener;
 import com.github.denisura.nytseacher.ui.search.results.SearchResultsFragment;
+import com.github.denisura.nytseacher.utils.StorageUtils;
 
 import org.parceler.Parcels;
 
@@ -49,7 +50,11 @@ public class SearchActivity extends SingleFragmentActivity implements FilterList
             mSearchFilter = Parcels.unwrap(savedInstanceState.getParcelable(STATE_FILTER));
         } else {
             //TODO pull search filter form Shared preferences
-            mSearchFilter = new SearchFilter();
+            mSearchFilter = StorageUtils.getFilterFromSharedPreferences(this);
+            if (mSearchFilter==null){
+                mSearchFilter = new SearchFilter();
+            }
+            Timber.d("Filter sort %s", mSearchFilter.getSort());
         }
         super.onCreate(savedInstanceState);
         if (!mQuery.equals("")) {
@@ -100,6 +105,9 @@ public class SearchActivity extends SingleFragmentActivity implements FilterList
     @Override
     public void onFilterAction(SearchFilter filter) {
         mSearchFilter = filter;
+
+
+        StorageUtils.saveFilterInSharedPreferences(this, filter);
 
         FragmentManager fm = getSupportFragmentManager();
         mActivityFragment = createFragment();

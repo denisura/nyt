@@ -1,44 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/card_view"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="5dp"
-    android:clickable="true"
-    android:focusable="true"
-    android:foreground="?selectableItemBackground"
-    android:padding="0dp"
-    card_view:cardCornerRadius="4dp"
-    card_view:cardElevation="@dimen/cardview_default_elevation"
-    card_view:cardUseCompatPadding="false">
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="viewModel"
+            type="com.github.denisura.nytseacher.ui.search.results.ArticleViewModel" />
+    </data>
 
-
-    <RelativeLayout
+    <android.support.v7.widget.CardView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/card_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?selectableItemBackground"
+        android:onClick="@{() -> viewModel.onArticleSelected()}"
+        android:padding="0dp"
+        card_view:cardCornerRadius="@dimen/cardview_corner_radius"
+        card_view:cardElevation="@dimen/cardview_default_elevation"
+        card_view:cardUseCompatPadding="false">
 
-        <ImageView
-            android:id="@+id/thumbnail"
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_gravity="center"
-            android:adjustViewBounds="true"
-            android:contentDescription="@string/article_thumbnail"
-            android:src="@null" />
+            android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/headline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/thumbnail"
-            android:layout_gravity="center_horizontal"
-            android:maxLines="3"
-            android:ellipsize="end"
-            android:padding="8dp"
-            tools:text="Android Development" />
-    </RelativeLayout>
+            <ImageView
+                android:id="@+id/thumbnail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/article_thumbnail"
+                android:src="@null"
+                app:imageUrl="@{viewModel.thumbnail}" />
 
-</android.support.v7.widget.CardView>
+            <TextView
+                android:id="@+id/headline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/thumbnail"
+                android:layout_gravity="center_horizontal"
+                android:ellipsize="end"
+                android:maxLines="3"
+                android:padding="@dimen/cardview_default_padding"
+                android:text="@{viewModel.headline}"
+                tools:text="Android Development" />
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+</layout>

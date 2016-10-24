@@ -35,7 +35,7 @@ public class NewYorkTimesService {
         HttpUrl originalHttpUrl = original.url();
 
         HttpUrl url = originalHttpUrl.newBuilder()
-                .addQueryParameter("api-key", BuildConfig.NYT_API_KEY)
+                .setQueryParameter("api-key", BuildConfig.NYT_API_KEY)
                 .build();
 
         // Request customization: add request headers

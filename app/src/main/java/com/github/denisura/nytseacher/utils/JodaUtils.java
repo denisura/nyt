@@ -15,4 +15,10 @@ public class JodaUtils {
         DateTimeFormatter dtfOut = DateTimeFormat.forPattern("YYYYMMdd");
         return dtfOut.print(date);
     }
+
+
+    public static String formatDate(LocalDate date, String pattern) {
+        DateTimeFormatter dtfOut = DateTimeFormat.forPattern(pattern);
+        return dtfOut.print(date);
+    }
 }

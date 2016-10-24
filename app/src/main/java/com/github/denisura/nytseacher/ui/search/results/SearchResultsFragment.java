@@ -1,16 +1,9 @@
 package com.github.denisura.nytseacher.ui.search.results;
 
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.customtabs.CustomTabsIntent;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -19,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.github.denisura.nytseacher.R;
-import com.github.denisura.nytseacher.customtabsclient.CustomTabActivityHelper;
 import com.github.denisura.nytseacher.data.model.Article;
 import com.github.denisura.nytseacher.data.model.ArticleSearchResponse;
 import com.github.denisura.nytseacher.data.model.Item;
@@ -27,6 +19,7 @@ import com.github.denisura.nytseacher.data.model.SearchFilter;
 import com.github.denisura.nytseacher.data.network.ArticleSearchOptions;
 import com.github.denisura.nytseacher.data.network.NewYorkTimesApi;
 import com.github.denisura.nytseacher.data.network.NewYorkTimesService;
+import com.github.denisura.nytseacher.databinding.WidgetRecyclerViewBinding;
 import com.github.denisura.nytseacher.ui.search.pagination.PaginationTool;
 import com.github.denisura.nytseacher.utils.NetworkUtils;
 
@@ -40,18 +33,30 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
 
+import static java.security.AccessController.getContext;
+
 public class SearchResultsFragment extends Fragment {
 
     // the fragment initialization parameters
     private static final String ARG_QUERY = "query";
     private static final String ARG_FILTER = "filter";
+
+
+    private WidgetRecyclerViewBinding mBinding;
+    private SearchResultsViewModel mViewModel;
+
     public RecyclerView mRecyclerView;
     public TextView mEmptyRecycleView;
+
     private SearchResultsAdapter recyclerViewAdapter;
     private Subscription pagingSubscription;
     private NewYorkTimesApi _apiService;
+
+
     private String mQuery = "";
+
     private SearchFilter mFilter = new SearchFilter();
+
 
     public SearchResultsFragment() {
     }
@@ -74,19 +79,27 @@ public class SearchResultsFragment extends Fragment {
         if (getArguments().containsKey(ARG_FILTER)) {
             mFilter = Parcels.unwrap(getArguments().getParcelable(ARG_FILTER));
         }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_search_results, container, false);
+
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.widget_recycler_view, container, false);
         setRetainInstance(true);
 
-        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
-        mEmptyRecycleView = (TextView) rootView.findViewById(R.id.recyclerview_empty);
+        View view = mBinding.getRoot();
+        //here data must be an instance of the class MarsDataProvider
+        mViewModel = new SearchResultsViewModel(getContext());
+        mBinding.setViewModel(mViewModel);
+
+        mRecyclerView = mBinding.recyclerView;
+        mEmptyRecycleView = mBinding.recyclerviewEmpty;
+
         init(savedInstanceState);
-        return rootView;
+
+        return view;
     }
 
     private void init(Bundle savedInstanceState) {
@@ -100,23 +113,6 @@ public class SearchResultsFragment extends Fragment {
             recyclerViewAdapter = new SearchResultsAdapter();
             recyclerViewAdapter.setHasStableIds(true);
         }
-        recyclerViewAdapter.setContext(getContext().getApplicationContext());
-        recyclerViewAdapter.setOnItemClickListener(article -> {
-
-            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_action_share);
-
-            CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder()
-                    .setToolbarColor(ContextCompat.getColor(getContext(), R.color.colorPrimary))
-                    .setActionButton(bitmap, "Share Link", getPendingShareIntent(getContext(), article.getWebUrl()), true)
-                    .addDefaultShareMenuItem()
-                    .build();
-            CustomTabActivityHelper.openCustomTab(getActivity(), customTabsIntent, Uri.parse(article.getWebUrl()),
-                    (activity, uri) -> {
-                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                        activity.startActivity(intent);
-                    });
-        });
-
         mRecyclerView.setSaveEnabled(true);
 
         mRecyclerView.setLayoutManager(recyclerViewLayoutManager);
@@ -198,19 +194,6 @@ public class SearchResultsFragment extends Fragment {
         if (mRecyclerView != null) {
             mRecyclerView.setAdapter(null);
         }
-        recyclerViewAdapter.setContext(null);
         super.onDestroyView();
-    }
-
-    public PendingIntent getPendingShareIntent(Context context, String url) {
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_TEXT, url);
-        int requestCode = 100;
-
-        return PendingIntent.getActivity(context,
-                requestCode,
-                intent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
     }
 }
