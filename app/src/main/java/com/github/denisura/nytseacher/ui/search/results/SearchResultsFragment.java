@@ -1,7 +1,15 @@
 package com.github.denisura.nytseacher.ui.search.results;
 
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -9,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.github.denisura.nytseacher.R;
+import com.github.denisura.nytseacher.customtabsclient.CustomTabActivityHelper;
 import com.github.denisura.nytseacher.data.model.Article;
 import com.github.denisura.nytseacher.data.model.ArticleSearchResponse;
 import com.github.denisura.nytseacher.data.model.Item;
@@ -85,6 +94,22 @@ public class SearchResultsFragment extends Fragment {
             recyclerViewAdapter.setHasStableIds(true);
         }
         recyclerViewAdapter.setContext(getContext().getApplicationContext());
+        recyclerViewAdapter.setOnItemClickListener(article -> {
+
+            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_action_share);
+
+            CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder()
+                    .setToolbarColor(ContextCompat.getColor(getContext(), R.color.colorPrimary))
+                    .setActionButton(bitmap, "Share Link", getPendingShareIntent(getContext(), article.getWebUrl()), true)
+                    .addDefaultShareMenuItem()
+                    .build();
+            CustomTabActivityHelper.openCustomTab(getActivity(), customTabsIntent, Uri.parse(article.getWebUrl()),
+                    (activity, uri) -> {
+                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                        activity.startActivity(intent);
+                    });
+        });
+
         mRecyclerView.setSaveEnabled(true);
 
         mRecyclerView.setLayoutManager(recyclerViewLayoutManager);
@@ -148,5 +173,17 @@ public class SearchResultsFragment extends Fragment {
         }
         recyclerViewAdapter.setContext(null);
         super.onDestroyView();
+    }
+
+    public PendingIntent getPendingShareIntent(Context context, String url) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT, url);
+        int requestCode = 100;
+
+        return PendingIntent.getActivity(context,
+                requestCode,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
     }
 }

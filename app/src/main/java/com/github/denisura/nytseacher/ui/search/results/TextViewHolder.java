@@ -17,7 +17,20 @@ class TextViewHolder extends RecyclerView.ViewHolder {
         mHeadline = (TextView) itemView.findViewById(R.id.headline);
     }
 
-    void bind(Context context, Article article) {
+    void bind(Context context, Article article, SearchResultsAdapter.OnItemClickListener listener) {
         mHeadline.setText(article.getHeadline());
+        // Setup the click listener
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Triggers click upwards to the adapter on click
+                if (listener != null) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        listener.onItemClick(article);
+                    }
+                }
+            }
+        });
     }
 }

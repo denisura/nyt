@@ -26,6 +26,19 @@ class SearchResultsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private boolean allItemsLoaded;
     private Context mContext;
 
+
+    // Define listener member variable
+    private OnItemClickListener listener;
+    // Define the listener interface
+    public interface OnItemClickListener {
+        void onItemClick(Article article);
+    }
+    // Define the method that allows the parent activity or fragment to define the listener
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
+
     SearchResultsAdapter() {
     }
 
@@ -81,10 +94,10 @@ class SearchResultsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         Article article = (Article) getItem(position).getEntity();
         switch (getItemViewType(position)) {
             case BASIC_VIEW:
-                ((BasicViewHolder) holder).bind(mContext, article);
+                ((BasicViewHolder) holder).bind(mContext, article, listener);
                 break;
             case TEXT_VIEW:
-                ((TextViewHolder) holder).bind(mContext, article);
+                ((TextViewHolder) holder).bind(mContext, article, listener);
                 break;
         }
     }
