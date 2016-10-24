@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.customtabs.CustomTabsIntent;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +16,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.github.denisura.nytseacher.R;
 import com.github.denisura.nytseacher.customtabsclient.CustomTabActivityHelper;
@@ -26,6 +28,7 @@ import com.github.denisura.nytseacher.data.network.ArticleSearchOptions;
 import com.github.denisura.nytseacher.data.network.NewYorkTimesApi;
 import com.github.denisura.nytseacher.data.network.NewYorkTimesService;
 import com.github.denisura.nytseacher.ui.search.pagination.PaginationTool;
+import com.github.denisura.nytseacher.utils.NetworkUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +44,7 @@ public class SearchResultsFragment extends Fragment {
     private static final String ARG_QUERY = "query";
     private static final String ARG_FILTER = "filter";
     public RecyclerView mRecyclerView;
+    public TextView mEmptyRecycleView;
     private SearchResultsAdapter recyclerViewAdapter;
     private Subscription pagingSubscription;
     private NewYorkTimesApi _apiService;
@@ -78,6 +82,7 @@ public class SearchResultsFragment extends Fragment {
         setRetainInstance(true);
 
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
+        mEmptyRecycleView = (TextView) rootView.findViewById(R.id.recyclerview_empty);
         init(savedInstanceState);
         return rootView;
     }
@@ -131,7 +136,21 @@ public class SearchResultsFragment extends Fragment {
                 PaginationTool
                         .buildPagingObservable(mRecyclerView, offset -> {
                             builder.page(offset / 10);
+                            if (!NetworkUtils.isNetworkAvailable(getContext())) {
+                                Snackbar snackbar = Snackbar
+                                        .make(mRecyclerView, getContext().getString(R.string.empty_search_results_no_network), Snackbar.LENGTH_LONG);
+                                snackbar.show();
+                                return null;
+                            }
+
+                            if (!NetworkUtils.isOnline()) {
+                                Snackbar snackbar = Snackbar
+                                        .make(mRecyclerView, getContext().getString(R.string.empty_search_results_offline), Snackbar.LENGTH_LONG);
+                                snackbar.show();
+                                return null;
+                            }
                             return _apiService.articleSearch(builder.build());
+
                         })
                         .build();
 
@@ -159,6 +178,12 @@ public class SearchResultsFragment extends Fragment {
                         }
                         recyclerViewAdapter.addNewItems(items);
                         recyclerViewAdapter.notifyItemInserted(recyclerViewAdapter.getItemCount() - articles.size());
+
+                        if (recyclerViewAdapter.getItemCount() > 0) {
+                            mEmptyRecycleView.setText("");
+                        } else {
+                            mEmptyRecycleView.setText(getContext().getString(R.string.empty_search_results_not_found));
+                        }
                     }
                 });
     }

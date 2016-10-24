@@ -3,6 +3,8 @@ package com.github.denisura.nytseacher.data.network;
 
 import com.github.denisura.nytseacher.BuildConfig;
 
+import java.util.concurrent.TimeUnit;
+
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -23,10 +25,10 @@ public class NewYorkTimesService {
                     .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                     .addConverterFactory(GsonConverterFactory.create());
 
-
     private static OkHttpClient.Builder httpClient =
-            new OkHttpClient.Builder();
-
+            new OkHttpClient.Builder()
+                    .readTimeout(60, TimeUnit.SECONDS)
+                    .connectTimeout(60, TimeUnit.SECONDS);
 
     private static Interceptor ApiKeyInterceptor = chain -> {
         Request original = chain.request();

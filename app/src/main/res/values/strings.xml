@@ -28,4 +28,8 @@
         <item translatable="false">Sports</item>
     </string-array>
 
+    <string name="empty_search_results_not_found">Nothing found for specified search criteria</string>
+    <string name="empty_search_results_no_network">The network is not available to fetch data.</string>
+    <string name="empty_search_results_offline">Device is offline. Try again later.</string>
+
 </resources>
