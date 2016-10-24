@@ -18,6 +18,8 @@ import com.github.denisura.nytseacher.ui.filter.FilterFragment;
 import com.github.denisura.nytseacher.ui.filter.FilterListener;
 import com.github.denisura.nytseacher.ui.search.results.SearchResultsFragment;
 
+import org.parceler.Parcels;
+
 import timber.log.Timber;
 
 
@@ -44,7 +46,7 @@ public class SearchActivity extends SingleFragmentActivity implements FilterList
         if (savedInstanceState != null) {
             // Restore value of members from saved state
             mQuery = savedInstanceState.getString(STATE_QUERY);
-            mSearchFilter = (SearchFilter) savedInstanceState.getSerializable(STATE_FILTER);
+            mSearchFilter = Parcels.unwrap(savedInstanceState.getParcelable(STATE_FILTER));
         } else {
             //TODO pull search filter form Shared preferences
             mSearchFilter = new SearchFilter();
@@ -91,7 +93,7 @@ public class SearchActivity extends SingleFragmentActivity implements FilterList
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         savedInstanceState.putString(STATE_QUERY, mQuery);
-        savedInstanceState.putSerializable(STATE_FILTER, mSearchFilter);
+        savedInstanceState.putParcelable(STATE_FILTER, Parcels.wrap(mSearchFilter));
         super.onSaveInstanceState(savedInstanceState);
     }
 

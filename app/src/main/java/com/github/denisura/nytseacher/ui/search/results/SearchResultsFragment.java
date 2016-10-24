@@ -30,6 +30,8 @@ import com.github.denisura.nytseacher.data.network.NewYorkTimesService;
 import com.github.denisura.nytseacher.ui.search.pagination.PaginationTool;
 import com.github.denisura.nytseacher.utils.NetworkUtils;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,7 +60,7 @@ public class SearchResultsFragment extends Fragment {
         SearchResultsFragment fragment = new SearchResultsFragment();
         Bundle args = new Bundle();
         args.putString(ARG_QUERY, query);
-        args.putSerializable(ARG_FILTER, filter);
+        args.putParcelable(ARG_FILTER, Parcels.wrap(filter));
         fragment.setArguments(args);
         return fragment;
     }
@@ -70,7 +72,7 @@ public class SearchResultsFragment extends Fragment {
             mQuery = getArguments().getString(ARG_QUERY);
         }
         if (getArguments().containsKey(ARG_FILTER)) {
-            mFilter = (SearchFilter) getArguments().getSerializable(ARG_FILTER);
+            mFilter = Parcels.unwrap(getArguments().getParcelable(ARG_FILTER));
         }
     }
 

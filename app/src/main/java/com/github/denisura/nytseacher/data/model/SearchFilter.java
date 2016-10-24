@@ -3,14 +3,18 @@ package com.github.denisura.nytseacher.data.model;
 import com.github.denisura.nytseacher.data.model.filter.SortOption;
 
 import org.joda.time.LocalDate;
+import org.parceler.Parcel;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
-public class SearchFilter implements Serializable {
-    private LocalDate mBeginDate;
-    private String mSort = SortOption.SORT_RELEVANCY;
-    private ArrayList mNewsDesk = new ArrayList();
+@Parcel
+public class SearchFilter {
+    LocalDate mBeginDate;
+    String mSort = SortOption.SORT_RELEVANCY;
+    ArrayList mNewsDesk = new ArrayList();
+
+    public SearchFilter() {
+    }
 
     public LocalDate getBeginDate() {
         return mBeginDate;

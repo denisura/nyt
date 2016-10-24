@@ -19,6 +19,7 @@ import com.github.denisura.nytseacher.utils.JodaUtils;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import org.joda.time.LocalDate;
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -51,21 +52,11 @@ public class FilterFragment extends DialogFragment {
         FilterFragment frag = new FilterFragment();
         Bundle args = new Bundle();
         //TODO replace putParceble
-        args.putSerializable(ARG_FILTER, filter);
+        args.putParcelable(ARG_FILTER, Parcels.wrap(filter));
         args.putString(ARG_TITLE, title);
         frag.setArguments(args);
         return frag;
     }
-
-    public static FilterFragment newInstance(String title) {
-        FilterFragment frag = new FilterFragment();
-        Bundle args = new Bundle();
-        //TODO replace putParceble
-        args.putString(ARG_TITLE, title);
-        frag.setArguments(args);
-        return frag;
-    }
-
 
     public void setListener(FilterListener listener) {
         mCallbacks = listener;
@@ -80,7 +71,7 @@ public class FilterFragment extends DialogFragment {
         mNewsDeck = (TextView) v.findViewById(R.id.news_desk);
 
         if (getArguments().containsKey(ARG_FILTER)) {
-            mSearchFilter = (SearchFilter) getArguments().getSerializable(ARG_FILTER);
+            mSearchFilter = Parcels.unwrap(getArguments().getParcelable(ARG_FILTER));
             if (mSearchFilter != null) {
                 if (mSearchFilter.getBeginDate() != null) {
                     mBeginDate.setText(JodaUtils.formatLocalDate(mSearchFilter.getBeginDate()));

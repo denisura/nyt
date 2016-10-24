@@ -28,7 +28,7 @@ public class DatePickerFragment extends DialogFragment {
 
     public static DatePickerFragment newInstance(String title, LocalDate date) {
         Bundle args = new Bundle();
-        args.putSerializable(ARG_TITLE, title);
+        args.putString(ARG_TITLE, title);
         args.putSerializable(ARG_DATE, date);
         DatePickerFragment fragment = new DatePickerFragment();
         fragment.setArguments(args);
