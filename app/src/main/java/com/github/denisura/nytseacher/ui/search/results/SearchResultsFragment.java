@@ -171,8 +171,10 @@ public class SearchResultsFragment extends Fragment {
 
                         List<Article> articles = articleSearchResponse.getResponse().getArticles();
                         for (Object entity : articles) {
-                            items.add(new Item(index, entity));
-                            index++;
+                            if (((Article) entity).getHeadline() != null) {
+                                items.add(new Item(index, entity));
+                                index++;
+                            }
                         }
                         recyclerViewAdapter.addNewItems(items);
                         recyclerViewAdapter.notifyItemInserted(recyclerViewAdapter.getItemCount() - articles.size());
